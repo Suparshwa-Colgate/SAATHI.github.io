@@ -1,0 +1,453 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.w { padding: 1.5rem 0; font-family: var(--font-sans); }
+
+.hdr { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.5rem; gap: 16px; flex-wrap: wrap; }
+
+.logo-block {}
+.logo-title { font-size: 28px; font-weight: 500; letter-spacing: 5px; color: #B33A1C; line-height: 1; }
+.logo-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-top: 3px; }
+.logo-expand { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; font-family: var(--font-mono); letter-spacing: 0.5px; }
+
+.tab-bar { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+.tab { background: none; border: 0.5px solid var(--color-border-secondary); border-radius: 20px; padding: 5px 13px; font-size: 12px; cursor: pointer; color: var(--color-text-secondary); transition: all 0.12s; }
+.tab:hover { background: var(--color-background-secondary); }
+.tab.on { background: #B33A1C; border-color: #B33A1C; color: #fff; }
+
+.sec-lbl { font-size: 10px; font-family: var(--font-mono); letter-spacing: 2px; color: var(--color-text-secondary); text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.sec-lbl::after { content: ''; flex: 1; height: 0.5px; background: var(--color-border-tertiary); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px; margin-bottom: 24px; }
+
+.pc { border: 0.5px solid var(--color-border-tertiary); border-radius: 12px; overflow: hidden; background: var(--color-background-primary); cursor: pointer; transition: transform 0.12s, border-color 0.12s; }
+.pc:hover { transform: translateY(-2px); border-color: var(--color-border-secondary); }
+.pc.open { grid-column: 1 / -1; cursor: default; }
+
+.pc-top { padding: 18px 20px 14px; position: relative; overflow: hidden; }
+.pc-num { font-size: 72px; font-weight: 500; position: absolute; right: 12px; top: -4px; opacity: 0.1; color: #fff; line-height: 1; }
+.pc-cat { font-size: 10px; font-family: var(--font-mono); letter-spacing: 1.5px; padding: 3px 8px; border-radius: 4px; display: inline-block; margin-bottom: 8px; background: rgba(255,255,255,0.18); color: rgba(255,255,255,0.9); }
+.pc-title { font-size: 22px; font-weight: 500; color: #fff; line-height: 1.15; position: relative; z-index: 1; }
+.pc-sub { font-size: 12px; color: rgba(255,255,255,0.72); margin-top: 5px; font-style: italic; position: relative; z-index: 1; }
+
+.pc-body { padding: 16px 20px; }
+.pc.open .pc-body { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px 28px; }
+
+.lbl { font-size: 10px; font-family: var(--font-mono); letter-spacing: 1.5px; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 5px; }
+.txt { font-size: 13px; color: var(--color-text-primary); line-height: 1.6; }
+
+.tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+.tag { font-size: 11px; padding: 3px 8px; border-radius: 4px; background: var(--color-background-secondary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-tertiary); }
+
+.divline { height: 0.5px; background: var(--color-border-tertiary); }
+
+.hint { font-size: 11px; color: var(--color-text-secondary); padding: 8px 20px; display: flex; align-items: center; gap: 5px; border-top: 0.5px solid var(--color-border-tertiary); }
+
+.box { border: 0.5px solid var(--color-border-tertiary); border-radius: 8px; padding: 12px 14px; background: var(--color-background-secondary); }
+.box strong { font-weight: 500; color: var(--color-text-primary); display: block; margin-bottom: 3px; font-size: 13px; }
+.box .txt { font-size: 12px; }
+
+.prompt-box { border: 0.5px solid var(--color-border-tertiary); border-radius: 8px; padding: 12px 14px; background: var(--color-background-secondary); }
+.prompt-item { font-size: 12px; color: var(--color-text-primary); font-family: var(--font-mono); line-height: 1.55; padding: 6px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.prompt-item:last-child { border-bottom: none; padding-bottom: 0; }
+.prompt-q { color: var(--color-text-secondary); font-size: 10px; display: block; margin-bottom: 2px; font-family: var(--font-mono); }
+
+.close-btn { background: none; border: 0.5px solid var(--color-border-secondary); border-radius: 6px; padding: 5px 14px; font-size: 11px; cursor: pointer; color: var(--color-text-secondary); margin: 0 20px 16px; display: block; }
+
+.full { grid-column: 1 / -1; }
+
+.myth-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 8px; }
+.myth-item { border: 0.5px solid var(--color-border-tertiary); border-radius: 8px; padding: 12px 14px; background: var(--color-background-primary); }
+.myth-ml { font-size: 10px; font-family: var(--font-mono); letter-spacing: 1px; margin-bottom: 5px; }
+.mf { color: #A32D2D; background: #FCEBEB; padding: 2px 7px; border-radius: 3px; }
+.mr { color: #27500A; background: #EAF3DE; padding: 2px 7px; border-radius: 3px; }
+.myth-txt { font-size: 12px; color: var(--color-text-primary); line-height: 1.5; margin-top: 4px; }
+
+.guardrail { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: 10px; padding: 18px 20px; margin-top: 8px; }
+.g-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-top: 12px; }
+.g-item { font-size: 12px; color: var(--color-text-primary); line-height: 1.55; }
+.g-num { font-size: 22px; font-weight: 500; color: #B33A1C; display: block; margin-bottom: 3px; }
+.g-item strong { font-weight: 500; display: block; margin-bottom: 2px; font-size: 13px; }
+
+.ftr { margin-top: 20px; border-top: 0.5px solid var(--color-border-tertiary); padding-top: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.ftr-t { font-size: 11px; color: var(--color-text-secondary); font-family: var(--font-mono); }
+
+.meaning-strip { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.ml { font-size: 11px; font-family: var(--font-mono); }
+.ml-letter { font-weight: 500; color: #B33A1C; }
+.ml-word { color: var(--color-text-secondary); }
+</style>
+
+<div class="w">
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">SAATHI - Sanand AI Adoption Toolkit for Human Intelligence, a 12-card handbook for S&amp;C employees at Colgate Sanand</h2>
+
+<div class="hdr">
+  <div class="logo-block">
+    <div class="logo-title">S A A T H I</div>
+    <div class="logo-name">Sanand AI Adoption Toolkit for Human Intelligence</div>
+    <div class="meaning-strip">
+      <span class="ml"><span class="ml-letter">S</span><span class="ml-word">anand</span></span>
+      <span class="ml"><span class="ml-letter">A</span><span class="ml-word">I</span></span>
+      <span class="ml"><span class="ml-letter">A</span><span class="ml-word">doption</span></span>
+      <span class="ml"><span class="ml-letter">T</span><span class="ml-word">oolkit for</span></span>
+      <span class="ml"><span class="ml-letter">H</span><span class="ml-word">uman</span></span>
+      <span class="ml"><span class="ml-letter">I</span><span class="ml-word">ntelligence</span></span>
+    </div>
+    <div class="logo-expand" style="margin-top:5px">Saathi (साथी) — companion, partner, fellow traveller</div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab on" onclick="setTab('all',this)">All 12</button>
+    <button class="tab" onclick="setTab('shopfloor',this)">Shopfloor S&amp;C</button>
+    <button class="tab" onclick="setTab('analytics',this)">Analytics</button>
+    <button class="tab" onclick="setTab('automation',this)">Automation</button>
+    <button class="tab" onclick="setTab('learning',this)">Learning</button>
+    <button class="tab" onclick="setTab('safety',this)">Safety</button>
+    <button class="tab" onclick="setTab('communication',this)">Communication</button>
+  </div>
+</div>
+
+<div id="myths-block">
+  <div class="sec-lbl">Shopfloor myth-busting</div>
+  <div class="myth-grid">
+    <div class="myth-item">
+      <div class="myth-ml"><span class="mf">Myth</span></div>
+      <div class="myth-txt">"Our production lines are custom. AI won't understand our machines or processes."</div>
+      <div class="myth-ml" style="margin-top:8px"><span class="mr">Reality</span></div>
+      <div class="myth-txt">AI understands context, not machines. Feed it your SOP, PID, or batch record and it can answer questions, spot gaps, and help troubleshoot -- the same way a smart colleague would read the manual.</div>
+    </div>
+    <div class="myth-item">
+      <div class="myth-ml"><span class="mf">Myth</span></div>
+      <div class="myth-txt">"I'm not technical enough to use AI tools."</div>
+      <div class="myth-ml" style="margin-top:8px"><span class="mr">Reality</span></div>
+      <div class="myth-txt">If you can send a WhatsApp message, you can use AI. Just type what you need in plain language. No coding, no special skills. The more you describe your situation, the better the output.</div>
+    </div>
+    <div class="myth-item">
+      <div class="myth-ml"><span class="mf">Myth</span></div>
+      <div class="myth-txt">"AI will give wrong answers for GMP and regulated processes."</div>
+      <div class="myth-ml" style="margin-top:8px"><span class="mr">Reality</span></div>
+      <div class="myth-txt">AI is a draft-and-assist tool, not a decision-maker. Use it to speed up writing, summarizing, and checking. Always have the qualified person verify before sign-off. The accountability stays with you.</div>
+    </div>
+    <div class="myth-item">
+      <div class="myth-ml"><span class="mf">Myth</span></div>
+      <div class="myth-txt">"AI is only for IT or data teams."</div>
+      <div class="myth-ml" style="margin-top:8px"><span class="mr">Reality</span></div>
+      <div class="myth-txt">Production engineers, quality managers, HR, supply chain, and shift supervisors are all finding daily time savings. If your job involves writing, reading, deciding, or explaining -- AI can help.</div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:20px">
+  <div class="sec-lbl" id="grid-label">All 12 toolkit cards</div>
+  <div class="grid" id="cardGrid"></div>
+</div>
+
+<div class="guardrail">
+  <div class="sec-lbl" style="margin-bottom:0">The SAATHI guardrails</div>
+  <div class="g-grid">
+    <div class="g-item"><span class="g-num">01</span><strong>The 80/20 rule</strong>AI drafts the first 80%. You add the final 20% -- the judgment, the polish, the accountability. Never submit AI output without a human review.</div>
+    <div class="g-item"><span class="g-num">02</span><strong>The sanity check</strong>AI can hallucinate facts. Always verify critical outputs -- especially specifications, regulatory values, safety thresholds, or anything that goes into a batch record.</div>
+    <div class="g-item"><span class="g-num">03</span><strong>No confidential data</strong>Never paste customer data, financial forecasts, trade secrets, or proprietary formulations into public AI tools. Use only Gemini via the approved Colgate workspace.</div>
+    <div class="g-item"><span class="g-num">04</span><strong>Human touch last</strong>Empathy, authority, and accountability cannot be outsourced. AI writes the draft. A qualified human signs off, approves, and owns the outcome.</div>
+    <div class="g-item"><span class="g-num">05</span><strong>Start a habit, not a project</strong>Pick one task from these 12 cards today. Spend 10 minutes. Build confidence slowly. AI adoption is a skill, not a one-time event.</div>
+  </div>
+</div>
+
+<div class="ftr">
+  <span class="ftr-t">Colgate-Palmolive &middot; Sanand Plant &middot; AI Council 2026</span>
+  <span class="ftr-t">SAATHI v1.0 &middot; Your AI companion at work</span>
+</div>
+</div>
+
+<script>
+const CARDS = [
+  {
+    id:1, cat:['shopfloor','analytics'], color:'#B33A1C', catLabel:'Shopfloor S&C',
+    title:'Batch Record &\nLog Reviewer', sub:'Catch what tired eyes miss',
+    what:'Production supervisors and quality engineers spend hours checking batch records, logbooks, and checklists against approved templates. AI acts as a tireless second pair of eyes -- comparing your filled record against the master SOP, flagging missing entries, incorrect values, or version mismatches before the batch is released.',
+    how:'Paste or upload your completed batch record along with the relevant SOP section or master template. Ask AI to compare the two documents and list every discrepancy, missing field, or deviation from the approved format.',
+    when:'Before a batch record is closed for QA review. During logbook audits. When a new operator fills a record for the first time. Whenever human fatigue risk is high -- night shifts or end of week.',
+    usecases:['Batch record pre-review','SOP vs. logbook comparison','Version mismatch detection','Missing step identification','Shift handover checklist verification'],
+    prompts:[
+      {q:'Compare records', t:'"Here is the filled batch record [paste] and here is the approved master template [paste]. List every discrepancy and missing field."'},
+      {q:'Check completeness', t:'"Review this batch record and identify any entries that appear incomplete, inconsistent, or that deviate from GMP expectations."'},
+      {q:'Summarize for QA', t:'"Summarize the top 3 discrepancies in this batch record in bullet points suitable for a QA manager review meeting."'}
+    ],
+    tip:'After AI flags an error, ask it to explain WHY it flagged it. This teaches your team, not just fixes the problem.',
+    impact:'Reduces pre-release review time. Catches human fatigue errors before they become formal deviations.'
+  },
+  {
+    id:2, cat:['shopfloor','safety'], color:'#1A4A6E', catLabel:'Shopfloor S&C',
+    title:'Machine Fault\nDiagnostic Assistant', sub:'OEM manual in your pocket',
+    what:'When a production machine trips or behaves unexpectedly, engineers typically flip through lengthy OEM manuals or wait for a vendor. By feeding the relevant manual section and the fault description to AI, you get an immediate structured diagnostic checklist -- possible causes ranked by likelihood, what to check first, and what to escalate.',
+    how:'Note the alarm code or describe the symptom clearly. Open AI and paste the relevant OEM manual section. Ask for the most likely causes and a step-by-step check sequence you can hand to the technician on the floor right now.',
+    when:'During an unplanned breakdown. When an operator sees a new alarm they have not encountered before. Before calling the OEM helpline -- AI resolves 60-70% of common faults faster. During PM planning to anticipate failure modes.',
+    usecases:['Atlas Copco compressor alarms','IWK / Pester filling line faults','Ozonator low-flow trips','Boiler trips and utility alarms','HVAC controller faults'],
+    prompts:[
+      {q:'Diagnose fault', t:'"The [machine] is showing alarm code E-045. Based on the manual [paste section], list the top 5 possible causes and what to physically check first."'},
+      {q:'Technician checklist', t:'"For a low chilled water flow trip on our ozonator, give me a step-by-step troubleshooting checklist I can hand to the technician right now."'},
+      {q:'Prevent recurrence', t:'"Based on this maintenance history [paste], what failure modes should we watch for in the next 30 days and what preventive actions do you suggest?"'}
+    ],
+    tip:'Build a library of fault description plus AI response pairs over time. This becomes your plant\'s own troubleshooting knowledge base.',
+    impact:'Faster mean time to repair. Reduces dependency on OEM helplines. Upskills operators through explained reasoning.'
+  },
+  {
+    id:3, cat:['shopfloor','analytics'], color:'#1A5C3A', catLabel:'Shopfloor S&C',
+    title:'Production\nDowntime Analyst', sub:'Find the pattern, fix the root cause',
+    what:'Production supervisors collect downtime data in SAP, OPERA, or Excel but rarely have time to analyze it deeply. AI can process weeks of raw downtime data and produce a clear Pareto breakdown -- which lines lost the most time, which equipment is the repeat offender, which shift has the highest unplanned stoppages, and what the top root causes appear to be.',
+    how:'Export your downtime log to Excel or copy-paste the relevant entries. Ask AI to categorize by machine, shift, and fault type. Request a Pareto summary and ask for the top 3 actionable recommendations you can bring to your next review.',
+    when:'During weekly production review preparation. When a line\'s OEE drops unexpectedly. Before a monthly MBR presentation. When justifying investment in a new spare part or PM schedule change.',
+    usecases:['OEE root cause breakdown','Line-wise stoppage Pareto','Shift performance comparison','Recurring fault identification','PM schedule gap analysis'],
+    prompts:[
+      {q:'Pareto analysis', t:'"Here is 4 weeks of downtime data [paste table]. Categorize by machine and fault type. Which 3 issues account for more than 70% of total lost time?"'},
+      {q:'Shift comparison', t:'"Compare A-shift vs B-shift downtime patterns in this data. Are there any trends that suggest a training or handover gap?"'},
+      {q:'MBR talking point', t:'"Using this downtime analysis, write a 5-line executive summary I can use as a talking point in the monthly business review."'}
+    ],
+    tip:'Paste data as plain text or a simple table. You do not need to format it perfectly. AI can work with messy exports.',
+    impact:'Converts raw logs into decision-ready insights in minutes instead of hours.'
+  },
+  {
+    id:4, cat:['shopfloor','communication'], color:'#4A1A6E', catLabel:'Shopfloor S&C',
+    title:'Deviation & CAPA\nDraft Writer', sub:'From incident to report in minutes',
+    what:'Writing a deviation report, CAPA, or near-miss RCA is one of the most time-consuming tasks for production and quality staff. AI can draft a structured report from your bullet points -- filling in the 5-Why logic, suggesting corrective actions, and formatting to standard templates -- in a fraction of the time.',
+    how:'Give AI the raw facts: what happened, when, on which line, what the immediate action was. Ask it to produce a draft deviation report, identify probable root causes using a 5-Why framework, and suggest three corrective and three preventive actions.',
+    when:'Immediately after an incident while details are fresh. When a near-miss needs rapid documentation. Before the QA deadline. When a new engineer needs a quality writing template to learn from.',
+    usecases:['Near-miss vehicle RCA','Batch deviation reports','CAPA documentation','Supplier defect complaints','Customer complaint responses'],
+    prompts:[
+      {q:'Draft deviation report', t:'"Write a structured deviation report for this incident: [describe what happened, date, line, product, batch number]. Include a 5-Why analysis and suggest 3 corrective actions."'},
+      {q:'Improve clarity', t:'"Rewrite this deviation report in clear, professional English while keeping all the technical facts. Remove jargon that a QA auditor would question."'},
+      {q:'Generate CAPA table', t:'"Based on this root cause [paste], generate a CAPA with specific measurable corrective actions and owners. Format it as a table."'}
+    ],
+    tip:'AI drafts 80% of the report. Your job is to verify accuracy, add site-specific context, and confirm all technical facts are correct before submission.',
+    impact:'Cuts deviation report drafting time from 2-3 hours to under 30 minutes. Improves consistency across writers.'
+  },
+  {
+    id:5, cat:['analytics'], color:'#5C4A00', catLabel:'Analytics',
+    title:'Data Analyst\non Demand', sub:'Patterns hidden in plain sight',
+    what:'Whether it is packaging defect data, incoming material rejections, or supplier performance logs, AI can take raw tabular data and produce a structured analysis with trend observations, Pareto rankings, and plain-language summaries -- ready for a management review without any pivot table skills required.',
+    how:'Export or copy your data into a clean table -- even messy Excel exports work. Ask AI specific analytical questions. The more specific the question, the sharper the answer. Follow up to go deeper on any finding.',
+    when:'Before a supplier review meeting. When preparing MBR data. When a manager asks why OEE dropped this month and you have the data but not the time to analyze it. When onboarding a new analyst.',
+    usecases:['Packaging defect Pareto','Supplier rejection ranking','Incoming material trend analysis','KPI dashboard summaries','Inventory variance explanations'],
+    prompts:[
+      {q:'Pareto summary', t:'"From this defect data [paste table], identify the top 3 issue types that account for the most downtime minutes and name the primary supplier responsible."'},
+      {q:'Trend observation', t:'"Looking at this 6-month rejection trend [paste data], describe whether the situation is improving or worsening and identify any seasonal patterns."'},
+      {q:'Executive summary', t:'"Summarize this data analysis in 4 bullet points suitable for a plant manager presentation. Be specific with numbers."'}
+    ],
+    tip:'If AI gives a vague answer, your question was too broad. Instead of "analyze this data," ask "which 3 items caused 80% of the rejections last quarter?"',
+    impact:'Reduces time to insight from days to minutes. Makes data-driven decisions accessible to non-analysts.'
+  },
+  {
+    id:6, cat:['automation'], color:'#0F3D2E', catLabel:'Automation',
+    title:'Report &\nDashboard Builder', sub:'Automate the repetitive reporting grind',
+    what:'S&C employees in production, quality, HR, and supply chain spend significant time building the same reports every week or month. AI can help write Google Apps Script, Excel formulas, or Domo and SIGMA queries that pull, calculate, and format data automatically -- turning a 2-hour manual task into a one-click process.',
+    how:'Describe your current process and what the output looks like. Ask AI to write the formula, script, or query step by step with explanations. Test it on a small dataset first. If it fails, paste the error message back and ask AI to fix and explain the issue.',
+    when:'When you find yourself doing the same copy-paste or calculation every week. When a report has more than 5 manual steps. When someone leaves the team and the tribal knowledge of how to build the monthly report walks out with them.',
+    usecases:['Attendance tracker automation','HR summary report scripts','KPI auto-calculation in Domo','Supplier scorecard formulas','Leave balance Google Sheet formulas'],
+    prompts:[
+      {q:'Write a formula', t:'"Write a Google Sheets formula that counts how many times an employee appears with an LWP entry in column D across a date range in row 1."'},
+      {q:'Apps Script task', t:'"Write a Google Apps Script that reads attendance data from Sheet1 and sends an email summary to managers every Monday at 8am."'},
+      {q:'Fix my error', t:'"This Apps Script is giving me a TypeError on line 12 [paste code and error]. Explain what is wrong and give me the corrected version."'}
+    ],
+    tip:'If you do not know the tool name, just describe what you want to achieve. AI will suggest the right approach and write the code.',
+    impact:'Eliminates hours of weekly manual reporting. Reduces calculation errors. Preserves institutional knowledge in code.'
+  },
+  {
+    id:7, cat:['learning'], color:'#1A2E6E', catLabel:'Learning',
+    title:'Personalized\nUpskilling Tutor', sub:'Learn any tool at your own pace',
+    what:'Whether you need to learn Snowflake, Domo, SAP transactions, Google Workspace, or Six Sigma concepts, AI adapts to your current level and teaches you step by step -- in plain English or Hindi. It gives you examples from your own work context, explains why things work, and never makes you feel judged for not knowing.',
+    how:'Tell AI your current skill level and your goal. Ask it to give you a learning path with 5 steps starting from the very beginning. Ask follow-up questions until you understand. Request examples from manufacturing contexts to make abstract concepts concrete.',
+    when:'When onboarding to a new digital tool. When your IDP requires a specific skill and no trainer is available. When you want to understand a concept, not just copy a solution. When preparing for a technical role or certification.',
+    usecases:['Learning Snowflake SQL','Domo dashboard building','Google Apps Script basics','Six Sigma DMAIC concepts','SAP MM transaction navigation'],
+    prompts:[
+      {q:'Learning path', t:'"I am completely new to Domo. I need to build a Cp Cpk dashboard pulling from Snowflake. Give me a 5-step learning plan with what I need to learn at each step."'},
+      {q:'Concept explained simply', t:'"Explain what a Cpk value of 1.33 means in a toothpaste manufacturing context, like I am a production operator who has never studied statistics."'},
+      {q:'Practice exercise', t:'"Give me 3 SQL practice exercises of increasing difficulty that use data tables similar to what a quality engineer at an FMCG plant would work with."'}
+    ],
+    tip:'Say "explain this to me like I am new to it, with a manufacturing example." AI will adjust its depth and language to your context.',
+    impact:'Democratizes learning. Removes dependency on scheduled training programs. Builds team capability continuously.'
+  },
+  {
+    id:8, cat:['safety','shopfloor'], color:'#3D1A00', catLabel:'Safety',
+    title:'Safety Content\n& Training Creator', sub:'Clear, multilingual, accessible training',
+    what:'Creating safety training content -- JSAs, toolbox talk scripts, induction videos, safety alerts -- takes significant time and often results in text-heavy documents that floor operators find hard to engage with. AI generates concise, multilingual training scripts in minutes, adapting language to the audience.',
+    how:'Tell AI the safety topic, the intended audience, and the language needed. Ask for a script, a talking-point guide, or a visual storyboard. Specify if the content needs to reference a specific procedure by pasting the relevant SOP text.',
+    when:'Before a new contractor induction. When updating a JSA for a changed process. When creating yard safety, LOTO, or confined space entry briefings. When you need a safety alert after a near-miss. When content needs to reach workers in their native language.',
+    usecases:['Yard safety protocol in Hindi','LOTO procedure guides','Confined space entry briefings','Toolbox talk scripts','Near-miss safety alert communications'],
+    prompts:[
+      {q:'Hindi safety script', t:'"Write a 3-minute toolbox talk script in simple Hindi about the correct procedure for working at height, for workers with low literacy."'},
+      {q:'JSA generation', t:'"Generate a Job Safety Analysis for the task of cleaning the inside of a batch mixing tank, including all hazards, controls, and emergency steps."'},
+      {q:'Safety alert draft', t:'"Write a one-page safety alert based on this near-miss incident [describe]. Include what happened, the root cause, and 3 preventive actions."'}
+    ],
+    tip:'Ask AI to write for "a worker who has never read an SOP before." Simpler language saves lives.',
+    impact:'Faster safety content creation. Higher floor engagement. Consistent messaging across all shifts.'
+  },
+  {
+    id:9, cat:['communication'], color:'#1A3D1A', catLabel:'Communication',
+    title:'Professional\nWriter & Editor', sub:'From rough notes to polished output',
+    what:'S&C employees write constantly -- emails, MBR presentations, escalation letters, supplier communications, management reports, and regulatory submissions. AI can take bullet points or rough notes and convert them into structured, professionally written documents that are clear, appropriately formal, and free of ambiguity.',
+    how:'Write your key points in whatever format feels natural. Paste them and ask AI to convert them into a professional email, a management slide, a supplier letter, or a formal report. Specify the tone and the audience.',
+    when:'When writing an escalation email to a vendor. When drafting a regulatory compliance letter. When preparing a management briefing. When English is not your first language and you want to polish your writing. When you need to translate a document for floor communication.',
+    usecases:['Vendor escalation letters','GPCB regulatory submissions','Management MBR summaries','Internal policy communications','Supplier performance review emails'],
+    prompts:[
+      {q:'Formal letter', t:'"Write a formal letter to our carton supplier escalating the repeated quality failure of L-Shape Cartons. Tone: firm but professional. Key facts: [paste facts]."'},
+      {q:'Email rewrite', t:'"Rewrite this email I drafted [paste] in a more professional tone. Keep all the facts but improve clarity and remove any aggressive language."'},
+      {q:'MBR summary', t:'"Convert these bullet points [paste] into a 3-paragraph executive summary suitable for a plant manager monthly business review."'}
+    ],
+    tip:'Always tell AI the audience and the purpose. "Write an email" gives generic output. "Write a firm escalation email to a tier-1 supplier about the financial impact of their delays" gives a usable draft.',
+    impact:'Cuts writing time significantly. Improves quality and consistency of external and management communications.'
+  },
+  {
+    id:10, cat:['shopfloor','analytics'], color:'#2A1A5C', catLabel:'Shopfloor S&C',
+    title:'Supply Chain\nScenario Planner', sub:'Navigate disruptions with confidence',
+    what:'When a raw material supply is disrupted, a key supplier goes on Force Majeure, or a geopolitical event threatens your energy or ingredient supply, AI rapidly helps you model scenarios, forecast cost impacts, draft contingency checklists, and prepare decision-ready briefings for leadership.',
+    how:'Describe the disruption scenario, your current parameters such as daily consumption and baseline cost, and what decisions you need to make. Ask AI to model scenarios with cost implications, suggest a contingency checklist, and draft the communication for leadership or regulatory bodies.',
+    when:'During a supply disruption event. When a supplier declares Force Majeure. When fuel or packaging cost spikes threaten the production OPEX budget. When you need to brief plant leadership within hours of a developing crisis.',
+    usecases:['Fuel switchover planning CNG to Diesel','Supplier Force Majeure response','Packaging alternate source qualification','Energy OPEX forecasting','Lead time risk assessment'],
+    prompts:[
+      {q:'Scenario model', t:'"Our CNG supplier has cut supply. We consume 1500L diesel equivalent per day at baseline Rs.90/L. Model the monthly OPEX impact at +5%, +10%, +15%, and +20% price scenarios in a table."'},
+      {q:'Contingency checklist', t:'"Create a technical checklist for switching our plant boiler from CNG to diesel fuel, covering safety checks, regulatory notifications, and operational steps."'},
+      {q:'Crisis brief', t:'"Write a 1-page situation brief for the plant manager summarizing the supply disruption, financial impact, actions taken so far, and 3 recommended next steps."'}
+    ],
+    tip:'In a crisis, start with: "Here is the situation [describe]. I have 2 hours to brief leadership. What are the 5 most important things I need to address?" AI will structure your thinking immediately.',
+    impact:'Cuts crisis response preparation from days to hours. Ensures structured decision-making under pressure.'
+  },
+  {
+    id:11, cat:['automation','learning'], color:'#0A3D3D', catLabel:'Automation',
+    title:'AI Chatbot\nBuilder', sub:'Deploy your own 24/7 helpdesk',
+    what:'Using Gemini Gems or NotebookLM, any S&C employee can build a custom AI assistant trained on their own documents -- SOPs, audit protocols, machine manuals, HR policies. This assistant answers team queries 24/7, reducing the load on managers and experts who currently get the same questions repeatedly.',
+    how:'Identify the most-asked questions in your domain. Collect the reference documents that answer them. Create a Gemini Gem or NotebookLM with those documents uploaded and a clear system instruction. Share the link with your team. Review and update documents periodically.',
+    when:'When you get the same 10 questions from team members every week. When a new employee needs orientation to a complex process. When your team works multiple shifts and access to expertise is limited at night.',
+    usecases:['FP&R audit protocol chatbot','Machine maintenance Q&A bot','HR policy helpdesk bot','Safety procedure query bot','Batch process parameter reference'],
+    prompts:[
+      {q:'Design your Gem', t:'"I want to create a Gemini Gem for my quality team using our FP&R audit protocol and GMP checklist. Write me an effective system instruction that tells the Gem how to behave."'},
+      {q:'NotebookLM setup', t:'"What are the 5 most important things I should do when setting up a NotebookLM to answer questions about a 50-page machine manual accurately?"'},
+      {q:'Test your bot', t:'"Here are 10 questions my team asks regularly [list]. Do your answers align with this SOP [paste relevant sections]? Flag any gaps or risks."'}
+    ],
+    tip:'The quality of your chatbot depends entirely on the quality of the documents you feed it. Keep documents updated whenever procedures change.',
+    impact:'Scales expert knowledge across shifts. Reduces repeat questions to managers. Accelerates onboarding.'
+  },
+  {
+    id:12, cat:['communication','analytics'], color:'#5C1A3A', catLabel:'Communication',
+    title:'Meeting Prep\n& Decision Support', sub:'Walk in prepared, walk out decided',
+    what:'Whether it is a supplier review, an MBR, a process improvement discussion, or an escalation meeting, AI helps you prepare a structured agenda, anticipate counter-arguments, synthesize background data into a briefing, and role-play the discussion so you can refine your position before the real meeting.',
+    how:'Share the meeting objective, attendees, and key data points. Ask AI to build an agenda, draft talking points, anticipate the top 3 objections, and suggest how to close with a clear decision. For negotiations, ask AI to role-play as the other party so you can practice your position.',
+    when:'30 minutes before any high-stakes meeting. When you need to present a business case to leadership. Before a difficult supplier negotiation. Before a performance review conversation. When preparing for an auditor visit.',
+    usecases:['MBR slide preparation','Supplier negotiation prep','Audit readiness briefing','Process change business case','Cross-functional alignment meetings'],
+    prompts:[
+      {q:'Meeting agenda', t:'"Build a 45-minute agenda for a supplier performance review. The 3 key issues are [list]. End with a clear decision or action plan."'},
+      {q:'Anticipate objections', t:'"I am proposing a change to our PM schedule. My manager will push back on cost. Give me the top 3 objections I will face and how to respond to each with data."'},
+      {q:'Role-play prep', t:'"Role-play as a vendor whose carton quality has been repeatedly poor. I will practice the escalation conversation. Push back realistically so I can prepare my responses."'}
+    ],
+    tip:'Use AI to stress-test your own arguments before the meeting. If AI can poke holes in your logic, the room will too.',
+    impact:'Better-prepared meetings. Faster decisions. Higher confidence in high-stakes conversations.'
+  }
+];
+
+let openId = null;
+let activeCat = 'all';
+
+function setTab(cat, el) {
+  activeCat = cat;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+  const myths = document.getElementById('myths-block');
+  myths.style.display = (cat === 'all' || cat === 'shopfloor') ? '' : 'none';
+  openId = null;
+  renderCards();
+}
+
+function buildCollapsed(c) {
+  const lines = c.title.split('\n');
+  return `
+    <div class="pc-top" style="background:${c.color}" onclick="toggle(${c.id})">
+      <div class="pc-num">${String(c.id).padStart(2,'0')}</div>
+      <div class="pc-cat">${c.catLabel}</div>
+      <div class="pc-title">${lines.join('<br>')}</div>
+      <div class="pc-sub">${c.sub}</div>
+    </div>
+    <div class="pc-body" onclick="toggle(${c.id})" style="display:grid;gap:10px">
+      <div><div class="lbl">What it does</div><div class="txt">${c.what.substring(0,110)}...</div></div>
+      <div class="divline"></div>
+      <div class="tags">${c.usecases.slice(0,3).map(u => '<span class="tag">'+u+'</span>').join('')}</div>
+    </div>
+    <div class="hint"><i class="ti ti-plus" aria-hidden="true"></i> Tap to open full card</div>
+  `;
+}
+
+function buildExpanded(c) {
+  const lines = c.title.split('\n');
+  const pts = c.prompts.map(p =>
+    '<div class="prompt-item"><span class="prompt-q">'+p.q+'</span>'+p.t+'</div>'
+  ).join('');
+  return `
+    <div class="pc-top" style="background:${c.color}">
+      <div class="pc-num">${String(c.id).padStart(2,'0')}</div>
+      <div class="pc-cat">${c.catLabel}</div>
+      <div class="pc-title">${lines.join('<br>')}</div>
+      <div class="pc-sub">${c.sub}</div>
+    </div>
+    <div class="pc-body">
+      <div><div class="lbl">What it does</div><div class="txt">${c.what}</div></div>
+      <div><div class="lbl">How to use it</div><div class="txt">${c.how}</div></div>
+      <div><div class="lbl">When to use it</div><div class="txt">${c.when}</div></div>
+      <div>
+        <div class="lbl">Use cases at Sanand</div>
+        <div class="tags" style="margin-top:2px">${c.usecases.map(u => '<span class="tag">'+u+'</span>').join('')}</div>
+      </div>
+      <div class="full">
+        <div class="prompt-box">
+          <div class="lbl">Sample prompts you can use right now</div>
+          ${pts}
+        </div>
+      </div>
+      <div class="full" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+        <div class="box" style="border-left:2px solid ${c.color};border-radius:0 8px 8px 0">
+          <strong>Pro tip</strong>
+          <div class="txt" style="font-size:12px">${c.tip}</div>
+        </div>
+        <div class="box">
+          <strong>Impact</strong>
+          <div class="txt" style="font-size:12px">${c.impact}</div>
+        </div>
+      </div>
+    </div>
+    <button class="close-btn" onclick="toggle(${c.id})">Close card</button>
+  `;
+}
+
+function toggle(id) {
+  const el = document.querySelector('.pc[data-id="'+id+'"]');
+  if (openId === id) {
+    el.classList.remove('open');
+    el.innerHTML = buildCollapsed(CARDS.find(c => c.id === id));
+    openId = null;
+  } else {
+    if (openId !== null) {
+      const prev = document.querySelector('.pc[data-id="'+openId+'"]');
+      if (prev) { prev.classList.remove('open'); prev.innerHTML = buildCollapsed(CARDS.find(c => c.id === openId)); }
+    }
+    openId = id;
+    el.classList.add('open');
+    el.innerHTML = buildExpanded(CARDS.find(c => c.id === id));
+  }
+}
+
+function renderCards() {
+  const grid = document.getElementById('cardGrid');
+  grid.innerHTML = '';
+  openId = null;
+  const filtered = activeCat === 'all' ? CARDS : CARDS.filter(c => c.cat.includes(activeCat));
+  document.getElementById('grid-label').textContent = activeCat === 'all'
+    ? 'All 12 toolkit cards'
+    : filtered.length + ' card' + (filtered.length !== 1 ? 's' : '') + ' in this category';
+  filtered.forEach(c => {
+    const d = document.createElement('div');
+    d.className = 'pc';
+    d.dataset.id = c.id;
+    d.innerHTML = buildCollapsed(c);
+    grid.appendChild(d);
+  });
+}
+
+renderCards();
+</script>
